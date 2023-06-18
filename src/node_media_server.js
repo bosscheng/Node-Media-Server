@@ -6,32 +6,44 @@
 
 const Https = require('https');
 const Logger = require('./node_core_logger');
+
 const NodeRtmpServer = require('./node_rtmp_server');
+
 const NodeHttpServer = require('./node_http_server');
+
 const NodeTransServer = require('./node_trans_server');
+
 const NodeRelayServer = require('./node_relay_server');
+
 const NodeFissionServer = require('./node_fission_server');
+
 const context = require('./node_core_ctx');
 const Package = require('../package.json');
 
 class NodeMediaServer {
   constructor(config) {
+    //  config
     this.config = config;
   }
 
-  run() {
+  run()
+  {
     Logger.setLogType(this.config.logType);
+
     Logger.log(`Node Media Server v${Package.version}`);
+    //  是否配置rtmp
     if (this.config.rtmp) {
       this.nrs = new NodeRtmpServer(this.config);
       this.nrs.run();
     }
 
+    //  是否配置 http
     if (this.config.http) {
       this.nhs = new NodeHttpServer(this.config);
       this.nhs.run();
     }
 
+    //  是否配置了 trans
     if (this.config.trans) {
       if (this.config.cluster) {
         Logger.log('NodeTransServer does not work in cluster mode');
@@ -41,6 +53,7 @@ class NodeMediaServer {
       }
     }
 
+    //  是否配置了 relay
     if (this.config.relay) {
       if (this.config.cluster) {
         Logger.log('NodeRelayServer does not work in cluster mode');
@@ -50,6 +63,7 @@ class NodeMediaServer {
       }
     }
 
+    //  fission 配置
     if (this.config.fission) {
       if (this.config.cluster) {
         Logger.log('NodeFissionServer does not work in cluster mode');
@@ -67,6 +81,7 @@ class NodeMediaServer {
       process.exit();
     });
 
+    //  check 版本
     Https.get('https://registry.npmjs.org/node-media-server', function (res) {
       let size = 0;
       let chunks = [];
@@ -74,6 +89,7 @@ class NodeMediaServer {
         size += chunk.length;
         chunks.push(chunk);
       });
+
       res.on('end', function () {
         let data = Buffer.concat(chunks, size);
         let jsonData = JSON.parse(data.toString());
@@ -81,6 +97,7 @@ class NodeMediaServer {
         let latestVersionNum = latestVersion.split('.')[0] << 16 | latestVersion.split('.')[1] << 8 | latestVersion.split('.')[2] & 0xff;
         let thisVersionNum = Package.version.split('.')[0] << 16 | Package.version.split('.')[1] << 8 | Package.version.split('.')[2] & 0xff;
         if (thisVersionNum < latestVersionNum) {
+          //  alert update
           Logger.log(`There is a new version ${latestVersion} that can be updated`);
         }
       });
@@ -88,6 +105,7 @@ class NodeMediaServer {
     });
   }
 
+  //  context
   on(eventName, listener) {
     context.nodeEvent.on(eventName, listener);
   }

@@ -1,6 +1,9 @@
 #!/usr/bin/env node 
 
+//  引入 node media server
 const NodeMediaServer = require('..');
+
+// 获取参数
 let argv = require('minimist')(process.argv.slice(2),
   {
     string:['rtmp_port','http_port','https_port'],
@@ -15,7 +18,8 @@ let argv = require('minimist')(process.argv.slice(2),
       'https_port': 8443,
     }
   });
-  
+
+// 如果参数带有 help
 if (argv.help) {
   console.log('Usage:');
   console.log('  node-media-server --help // print help information');
@@ -25,6 +29,7 @@ if (argv.help) {
   process.exit(0);
 }
 
+//  config
 const config = {
   rtmp: {
     port: argv.rtmp_port,
@@ -61,8 +66,11 @@ const config = {
 };
 
 
+// new server and next run
 let nms = new NodeMediaServer(config);
 nms.run();
+
+//  listen events
 
 nms.on('preConnect', (id, args) => {
   console.log('[NodeEvent on preConnect]', `id=${id} args=${JSON.stringify(args)}`);

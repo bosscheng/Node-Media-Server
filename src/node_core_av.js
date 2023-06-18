@@ -5,17 +5,32 @@
 //
 
 const Bitop = require('./node_core_bitop');
+//  aac sample rate
 const AAC_SAMPLE_RATE = [
-  96000, 88200, 64000, 48000,
-  44100, 32000, 24000, 22050,
-  16000, 12000, 11025, 8000,
-  7350, 0, 0, 0
+  96000,
+  88200,
+  64000,
+  48000,
+  44100,
+  32000,
+  24000,
+  22050,
+  16000,
+  12000,
+  11025,
+  8000,
+  7350,
+  0,
+  0,
+  0
 ];
 
+//  channel
 const AAC_CHANNELS = [
   0, 1, 2, 3, 4, 5, 6, 8
 ];
 
+//  audio codec name
 const AUDIO_CODEC_NAME = [
   '',
   'ADPCM',
@@ -36,24 +51,26 @@ const AUDIO_CODEC_NAME = [
   'Uncompressed'
 ];
 
+//  audio sound rete
 const AUDIO_SOUND_RATE = [
   5512, 11025, 22050, 44100
 ];
 
+//  video codec name
 const VIDEO_CODEC_NAME = [
-  '',
-  'Jpeg',
-  'Sorenson-H263',
-  'ScreenVideo',
-  'On2-VP6',
-  'On2-VP6-Alpha',
-  'ScreenVideo2',
-  'H264',
-  '',
-  '',
-  '',
-  '',
-  'H265'
+  '', // 0
+  'Jpeg', // 1
+  'Sorenson-H263',// 2
+  'ScreenVideo',// 3
+  'On2-VP6',// 4
+  'On2-VP6-Alpha',// 5
+  'ScreenVideo2', // 6
+  'H264', // 7
+  '', // 8
+  '', // 9
+  '', // 10
+  '', // 11
+  'H265' // 12
 ];
 
 function getObjectType(bitop) {
